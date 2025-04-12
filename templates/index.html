@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Code Commentor - Suhas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Fira Code', monospace;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fullscreen background video */
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.5) blur(1px);
+    }
+
+    h1 {
+       font-family: 'Fira Code', monospace;
+      color: #00e676;
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      text-shadow: 0 0 10px #000;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      background-color: rgba(18, 18, 18, 0.5);
+      opacity: 1;
+      padding: 2rem;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 25px rgba(255, 64, 129, 0.1);
+    }
+
+    textarea, select {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #444;
+      border-radius: 8px;
+
+    }
+    textarea::placeholder {
+      color: #00e676;
+    }
+    textarea {
+      height: 250px;
+      resize: vertical;
+    }
+
+    button {
+      background-color: #00e676 ;
+      border: none;
+      color: rgb(233, 230, 230);
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #43a047;
+    }
+
+    .copy-btn {
+      background-color: #2196F3;
+    }
+    .copy-btn:hover {
+      background-color: #1976D2;}
+    .download-btn {
+      background-color: #FF9800;
+    }
+    .download-btn:hover {
+      background-color: #F57C00;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      background-color: #0d0d0d;
+      color: #00e676;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 8px;
+      min-height: 200px;
+      font-size: 0.95rem;
+      font-family: 'Fira Code', monospace;
+      border: 1px dashed #444;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🔥 Live video background -->
+  <video autoplay muted playsinline loop id="bgVideo">
+    <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4"  >
+    Your browser does not support HTML5 video.
+  </video>
+
+  <h1>🧠 CODE COMMENTOR</h1>
+
+  <div class="container" >
+    <select id="modelSelect"style="color: #00e676;">
+      <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
+      <option value="openchat/openchat-7b">OpenChat 7B</option>
+    </select>
+
+    <textarea id="codeInput" placeholder="Paste your code here..." ></textarea>
+
+    <div class="btn-row">
+      <button onclick="commentcode()">💬 Generate Comments</button>
+      <button onclick="resetCode()">🔄 Reset</button>
+      <button class="copy-btn" onclick="copyOutput()">📋 Copy</button>
+      <button class="download-btn" onclick="downloadOutput()">⬇️ Download</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #00e676;background: #000;padding: 10px;">
+    <p><i>&copy; powered by Suhas B M</i></p>
+  </footer>
+
+  <script>
+    function resetCode() {
+      document.getElementById("codeInput").value = "";
+      document.getElementById("output").innerText = "";
+    }
+
+    function commentcode() {
+      const code = document.getElementById("codeInput").value.trim();
+      const model = document.getElementById("modelSelect").value;
+      if (!code) return alert("Please enter some code first.");
+
+      document.getElementById("output").innerText = "⏳ Generating comments...";
+
+      fetch("http://127.0.0.1:5000/comment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, model })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.commented_code) {
+          document.getElementById("output").innerText = data.commented_code;
+        } else {
+          document.getElementById("output").innerText = "❌ Error: " + data.error;
+        }
+      })
+      .catch(error => {
+        document.getElementById("output").innerText = "❌ Error: " + error;
+      });
+    }
+
+    function copyOutput() {
+      const text = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(text)
+        .then(() => alert("✅ Copied!"))
+        .catch(() => alert("❌ Failed to copy."));
+    }
+
+    function downloadOutput() {
+      const content = document.getElementById("output").innerText;
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "commented_code.txt";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
