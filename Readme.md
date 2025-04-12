@@ -60,6 +60,7 @@ OPENROUTER_API_KEY = "your-api-key-here"
 python app.py
 Then open http://127.0.0.1:5000 in your browser.
 ```
+---
 
 **📂 Project Structure**
 ```csharp
@@ -69,10 +70,12 @@ Then open http://127.0.0.1:5000 in your browser.
 └── static/              # (Optional for assets)
 ```
 
+---
 
 **🧠 Sample Prompt Sent to Model**
 “Comment this code clearly and meaningfully with the code and add comments in the middle. At the end, add a brief explanation of the code.”
 
+---
 
 **Built by**
 SUHAS B M 
