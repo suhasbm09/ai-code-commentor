@@ -3,7 +3,7 @@ import requests
 from flask_cors import CORS
 
 # Hardcoded OpenRouter API key
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "Place your API KEY"
 
 app = Flask(__name__)
 CORS(app)

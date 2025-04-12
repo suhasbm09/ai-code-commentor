@@ -23,7 +23,7 @@ Built with:
 
 ## 📸 UI Preview
 
-![preview](https://github.com/yourusername/ai-code-commentor/assets/preview-image-path.png)  
+![preview](https://github.com/suhasbm09/ai-code-commentor/CODE_COMMENTOR.mp4)  
 *(Replace with your deployed app screenshot or screen recording)*
 
 ---
@@ -42,3 +42,35 @@ Built with:
 ```bash
 git clone https://github.com/suhasbm09/ai-code-commentor.git
 cd ai-code-commentor
+
+1️⃣ Install backend dependencies
+```bash
+pip install flask flask-cors requests
+
+2️⃣ Set your OpenRouter API key in app.py
+```python
+
+OPENROUTER_API_KEY = "your-api-key-here"
+👉 Get your key here: https://openrouter.ai/
+
+▶️ Run the App
+```bash
+python app.py
+Then open http://127.0.0.1:5000 in your browser.
+
+📂 Project Structure
+```csharp
+├── app.py               # Flask backend
+├── templates/
+│   └── index.html       # Frontend UI with video background
+└── static/              # (Optional for assets)
+
+
+🧠 Sample Prompt Sent to Model
+“Comment this code clearly and meaningfully with the code and add comments in the middle. At the end, add a brief explanation of the code.”
+
+
+**Built by**
+SUHAS B M 
+
+-feel free to contact @suhasbm2004@gmail.com
