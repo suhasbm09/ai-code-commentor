@@ -15,15 +15,14 @@ Built with:
 - ✨ Paste any code (Python, C++, etc.)
 - 🧠 AI adds comments inline + final explanation
 - 🔄 Reset, 📋 Copy, ⬇️ Download the result
-- 🎥 Beautiful animated hacker-style background
 - 🧩 Model selection (Mistral 7B, OpenChat 7B)
-- 📜 Styled placeholder and green terminal-like output
+
 
 ---
 
 ## 📸 UI Preview
 
-![preview](https://github.com/suhasbm09/ai-code-commentor/CODE_COMMENTOR.mp4)  
+![preview](https://github.com/suhasbm09/ai-code-commentor/static/image.png)  
 *(Replace with your deployed app screenshot or screen recording)*
 
 ---
@@ -42,31 +41,36 @@ Built with:
 ```bash
 git clone https://github.com/suhasbm09/ai-code-commentor.git
 cd ai-code-commentor
+```
 
-1️⃣ Install backend dependencies
+**1️⃣ Install backend dependencies**
 ```bash
 pip install flask flask-cors requests
+```
 
-2️⃣ Set your OpenRouter API key in app.py
+**2️⃣ Set your OpenRouter API key in app.py**
 ```python
 
 OPENROUTER_API_KEY = "your-api-key-here"
 👉 Get your key here: https://openrouter.ai/
+```
 
-▶️ Run the App
+**▶️ Run the App**
 ```bash
 python app.py
 Then open http://127.0.0.1:5000 in your browser.
+```
 
-📂 Project Structure
+**📂 Project Structure**
 ```csharp
 ├── app.py               # Flask backend
 ├── templates/
 │   └── index.html       # Frontend UI with video background
 └── static/              # (Optional for assets)
+```
 
 
-🧠 Sample Prompt Sent to Model
+**🧠 Sample Prompt Sent to Model**
 “Comment this code clearly and meaningfully with the code and add comments in the middle. At the end, add a brief explanation of the code.”
 
 
