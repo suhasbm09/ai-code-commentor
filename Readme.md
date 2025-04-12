@@ -22,8 +22,8 @@ Built with:
 
 ## 📸 UI Preview
 
-![preview](https://github.com/suhasbm09/ai-code-commentor/static/image.png)  
-*(Replace with your deployed app screenshot or screen recording)*
+![preview](https://github.com/suhasbm09/ai-code-commentor/blob/master/static/image.png)  
+
 
 ---
 
