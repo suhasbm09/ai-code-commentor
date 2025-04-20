@@ -19,7 +19,6 @@
       position: relative;
     }
 
-    /* Fullscreen background video */
     #bgVideo {
       position: fixed;
       top: 0;
@@ -32,71 +31,51 @@
     }
 
     h1 {
-       font-family: 'Fira Code', monospace;
       color: #00e676;
       margin-top: 2rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       text-align: center;
-      text-shadow: 0 0 10px #000;
+      font-size: 2.5rem;
+      text-shadow: 0 0 12px #000;
+      letter-spacing: 1px;
     }
 
     .container {
-      width: 90%;
-      max-width: 1000px;
-      background-color: rgba(18, 18, 18, 0.5);
-      opacity: 1;
+      width: 92%;
+      max-width: 960px;
+      background-color: rgba(18, 18, 18, 0.55);
+      backdrop-filter: blur(10px);
       padding: 2rem;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 25px rgba(255, 64, 129, 0.1);
+      margin: 2rem auto;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 255, 180, 0.1);
     }
 
     textarea, select {
       width: 100%;
       margin-bottom: 1rem;
       padding: 1rem;
-      font-family: 'Fira Code', monospace;
       font-size: 1rem;
       background-color: #1e1e1e;
       color: #ffffff;
-      border: 1px solid #444;
-      border-radius: 8px;
+      border: 1px solid #333;
+      border-radius: 10px;
+      transition: 0.2s;
+    }
 
+    textarea:focus, select:focus {
+      border-color: #00e676;
+      outline: none;
     }
-    textarea::placeholder {
-      color: #00e676;
-    }
+
     textarea {
-      height: 250px;
+      height: 240px;
       resize: vertical;
     }
 
-    button {
-      background-color: #00e676 ;
-      border: none;
-      color: rgb(233, 230, 230);
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 0.5rem;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #43a047;
-    }
-
-    .copy-btn {
-      background-color: #2196F3;
-    }
-    .copy-btn:hover {
-      background-color: #1976D2;}
-    .download-btn {
-      background-color: #FF9800;
-    }
-    .download-btn:hover {
-      background-color: #F57C00;
+    select {
+      background-color: #111;
+      color: #00e676;
     }
 
     .btn-row {
@@ -104,6 +83,45 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      border: none;
+      font-weight: bold;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:nth-child(1) {
+      background-color: #00e676;
+      color: #000;
+    }
+
+    button:nth-child(2) {
+      background-color: #555;
+      color: #fff;
+    }
+
+    .copy-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .download-btn {
+      background-color: #FF9800;
+      color: white;
     }
 
     #output {
@@ -112,31 +130,58 @@
       color: #00e676;
       padding: 1rem;
       margin-top: 1.5rem;
-      border-radius: 8px;
+      border-radius: 10px;
       min-height: 200px;
       font-size: 0.95rem;
-      font-family: 'Fira Code', monospace;
       border: 1px dashed #444;
+      overflow-y: auto;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #00e676;
+      background: #000000aa;
+      padding: 10px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔥 Live video background -->
   <video autoplay muted playsinline loop id="bgVideo">
-    <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4"  >
+    <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4">
     Your browser does not support HTML5 video.
   </video>
 
   <h1>🧠 CODE COMMENTOR</h1>
 
-  <div class="container" >
-    <select id="modelSelect"style="color: #00e676;">
+  <div class="container">
+    <select id="modelSelect">
       <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
       <option value="openchat/openchat-7b">OpenChat 7B</option>
     </select>
 
-    <textarea id="codeInput" placeholder="Paste your code here..." ></textarea>
+    <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
 
     <div class="btn-row">
       <button onclick="commentcode()">💬 Generate Comments</button>
@@ -148,8 +193,8 @@
     <div id="output"></div>
   </div>
 
-  <footer style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; color: #00e676;background: #000;padding: 10px;">
-    <p><i>&copy; powered by Suhas B M | INDIA | Software Engineer  </i></p>
+  <footer>
+    <i>&copy; powered by Suhas B M | INDIA | Software Engineer</i>
   </footer>
 
   <script>
