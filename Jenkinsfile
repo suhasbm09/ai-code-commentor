@@ -4,6 +4,9 @@ pipeline{
     environment{
         DOCKER_IMAGE='suhasbm09/ai-code-commentor'
     }
+    triggers{
+        githubPush()
+    }
 
     stages{
         stage('clone Repo'){
