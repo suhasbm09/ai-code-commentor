@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 
 # Hardcoded OpenRouter API key
-OPENROUTER_API_KEY = "Place your API KEY"
+load_dotenv()
+api_key=os.getenv("OPENROUTER_API_KEY")
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +26,7 @@ def comment():
 
     try:
         headers = {
-            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
             "HTTP-Referer": "http://127.0.0.1:5000/",
             "X-Title": "AI Code Commenter",
