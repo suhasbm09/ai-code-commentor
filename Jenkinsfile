@@ -1,23 +1,33 @@
 pipeline{
     agent any
 
+    environment{
+        DOCKER_IMAGE='suhasbm09/ai-code-commentor'
+    }
+
     stages{
         stage('clone Repo'){
             steps{
-                git 'git@github.com:suhasbm09/ai-code-commentor.git'
+                git branch:'master',
+                url:'git@github.com:suhasbm09/ai-code-commentor.git'
             }
         }
 
         stage('Build Docker Image'){
             steps{
                 script{
-                    dockerImage= docker.build("ai-code-commentor:latest")
+                    sh 'docker build -t $DOCKER_IMAGE:latest .'
                 }
             }
         }
-        stage('Run Container'){
+        stage('Push to DockerHub'){
             steps{
-                sh 'docker run -d -p 5000:5000 ai-code-commentor:latest'
+                withCredentials([usernamePassword(credentialsId:'dockerhub-creds',usernameVariable:'DOCKER_USER',passwordVariable:'DOCKER_PASS')]){
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push $DOCKER_IMAGE:latest
+                    '''
+                }
             }
         }
     }
