@@ -99,12 +99,11 @@ docker run -d -p 5000:5000 --env-file .env ai-code-commentor:latest
 ---
 
 **🧠 Sample Prompt Sent to Model**
-““Comment this code clearly and meaningfully with inline comments. At the end, add a brief explanation.”
+““Comment this code clearly and meaningfully with inline comments. At the end, add a brief explanation.““
 
 ---
 
 **Built by**
-SUHAS B M 
-#rs Year CSE Student
+SUHAS B M | CSE Student
 
-- @suhasbm2004@gmail.com
+- @suhaasbm2004@gmail.com
