@@ -25,7 +25,7 @@ Built with:
 
 ## 📸 UI Preview
 
-![preview](https://github.com/suhasbm09/ai-code-commentor/blob/master/static/image.png)  
+![preview](https://github.com/suhasbm09/ai-code-commentor/blob/master/frontend/static/image.png)  
 
 
 ---
