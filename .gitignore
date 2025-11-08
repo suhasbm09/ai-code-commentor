@@ -1,1 +1,46 @@
+.python-version
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.env
+env/
+venv/
+ENV/
+.venv/
+
+# VSCode
+.vscode/
+
+# PyInstaller
+dist/
+build/
+
+# Distribution / packaging
+*.egg-info/
+.eggs/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Node (if frontend added later)
+node_modules/
+
+# dotenv
 .env
+
+# Docker
+docker-compose.override.yml
+
+# JetBrains
+.idea/
+
+# Ignore any local secret files
+secrets.json
+
+# Ignore system files
+Thumbs.db

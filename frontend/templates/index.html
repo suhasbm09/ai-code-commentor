@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Code Commentor | Suhas B M</title>
+  <link rel="icon" href="https://emojicdn.elk.sh/🧠" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Fira Code', monospace;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      background-color: #000;
+      position: relative;
+    }
+
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.5) blur(1px);
+    }
+
+    h1 {
+      color: #00e676;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 2.5rem;
+      text-shadow: 0 0 12px #000;
+      letter-spacing: 1px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 960px;
+      background-color: rgba(18, 18, 18, 0.55);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      margin: 2rem auto;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 255, 180, 0.1);
+    }
+
+    textarea, select {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      font-size: 1rem;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      border: 1px solid #333;
+      border-radius: 10px;
+      transition: 0.2s;
+    }
+
+    textarea:focus, select:focus {
+      border-color: #00e676;
+      outline: none;
+    }
+
+    textarea {
+      height: 240px;
+      resize: vertical;
+    }
+
+    select {
+      background-color: #111;
+      color: #00e676;
+      appearance: none;
+      padding-right: 2rem;
+      background-image: url("data:image/svg+xml,%3Csvg fill='%2300e676' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      background-size: 1rem;
+    }
+
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      border: none;
+      font-weight: bold;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:nth-child(1) {
+      background-color: #00e676;
+      color: #000;
+    }
+
+    button:nth-child(2) {
+      background-color: #555;
+      color: #fff;
+    }
+
+    .copy-btn {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .download-btn {
+      background-color: #FF9800;
+      color: white;
+    }
+
+    /* Output container */
+    #output {
+      background-color: #0b0b0b;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 12px;
+      min-height: 160px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #d6dee6;
+      border: 1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.2s ease;
+    }
+
+    #output.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Headings inside result */
+    #output h1, #output h2, #output h3 {
+      color: #84ffb1;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    /* Code blocks (Prism) */
+    #output pre {
+      background-color: #0f1113;
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+      white-space: pre; /* preserve formatting */
+      tab-size: 2;
+      -moz-tab-size: 2;
+      font-size: 13px;
+    }
+
+    #output code {
+      font-family: 'Fira Code', 'Source Code Pro', monospace;
+      font-size: 13px;
+      color: #d6dee6;
+      line-height: 1.6;
+    }
+
+    /* Prism token overrides for clearer comment vs code colors */
+    #output .token.comment,
+    #output .token.prolog,
+    #output .token.doctype,
+    #output .token.cdata {
+      color: #98e6a7; /* soft green for comments */
+      font-style: normal;
+      opacity: 0.95;
+    }
+
+    #output .token.keyword {
+      color: #7fb0ff; /* blue for keywords */
+      font-weight: 600;
+    }
+
+    #output .token.function {
+      color: #ffa7c4; /* pinkish for function names */
+    }
+
+    #output .token.string {
+      color: #ffb86b; /* orange for strings */
+    }
+
+    #output .token.number {
+      color: #f78c6c;
+    }
+
+    #output .token.operator,
+    #output .token.punctuation {
+      color: #cfd8e3;
+    }
+
+    /* Make long lines scroll horizontally inside pre */
+    #output pre::-webkit-scrollbar {
+      height: 10px;
+    }
+    #output pre::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #00e676;
+      background: #000000aa;
+      padding: 10px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(5px);
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted playsinline loop id="bgVideo">
+    <!-- <source src="{{ url_for('static', filename='bg.mp4') }}" type="video/mp4"> -->
+    <source src="https://videos.pexels.com/video-files/2297636/2297636-uhd_3840_2160_30fps.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <h1>🧠 CODE COMMENTOR</h1>
+
+  <div class="container">
+    <select id="modelSelect">
+      <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
+      <option value="openchat/openchat-7b">OpenChat 7B</option>
+    </select>
+
+    <textarea id="codeInput" placeholder="Paste your code here..."></textarea>
+
+    <div class="btn-row">
+      <button onclick="commentcode()">💬 Generate Comments</button>
+      <button onclick="resetCode()">🔄 Reset</button>
+      <button class="copy-btn" onclick="copyOutput()">📋 Copy</button>
+      <button class="download-btn" onclick="downloadOutput()">⬇️ Download</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+  <footer>
+    <i>&copy; Built by SUHAS B M | INDIA </i>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    function resetCode() {
+      document.getElementById("codeInput").value = "";
+      const output = document.getElementById("output");
+      output.innerText = "";
+      output.classList.remove("visible");
+    }
+
+    function commentcode() {
+      const code = document.getElementById("codeInput").value.trim();
+      const model = document.getElementById("modelSelect").value;
+      const output = document.getElementById("output");
+
+      if (!code) return alert("Please enter some code first.");
+
+      output.innerText = "⏳ Generating comments...";
+      output.classList.add("visible");
+
+      fetch("http://127.0.0.1:5000/comment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, model })
+      })
+      .then(response => response.json())
+      .then(data => {
+        const output = document.getElementById("output");
+        let content = data.commented_code || "❌ Error: " + data.error;
+        // Parse markdown code blocks and highlight
+        content = content.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+          lang = lang || 'javascript'; // default language
+          return `<pre><code class="language-${lang}">${Prism.util.encode(code)}</code></pre>`;
+        });
+        // Format headers
+        content = content.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+        content = content.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+        content = content.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+        output.innerHTML = content;
+        Prism.highlightAllUnder(output);
+      })
+      .catch(error => {
+        output.innerText = "❌ Error: " + error;
+      });
+    }
+
+    function copyOutput() {
+      const text = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(text)
+        .then(() => alert("✅ Copied!"))
+        .catch(() => alert("❌ Failed to copy."));
+    }
+
+    function downloadOutput() {
+      const content = document.getElementById("output").innerText;
+      const blob = new Blob([content], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "commented_code.txt";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

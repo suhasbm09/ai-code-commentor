@@ -48,10 +48,13 @@ cd ai-code-commentor
 
 **1️⃣ Install backend dependencies**
 ```bash
-pip install flask flask-cors requests python-dotenv
+cd backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-2️⃣ Create a .env file
+2️⃣ Create a .env file in backend/
 ```env
 OPENROUTER_API_KEY=your-api-key-here
 👉 Get your key here: https://openrouter.ai/
@@ -59,6 +62,8 @@ OPENROUTER_API_KEY=your-api-key-here
 
 **▶️ Run the App**
 ```bash
+cd backend
+source venv/bin/activate
 python app.py
 Then open http://127.0.0.1:5000 in your browser.
 ```
@@ -68,13 +73,13 @@ Then open http://127.0.0.1:5000 in your browser.
 Build Docker Image
 
 ```bash
-docker build -t ai-code-commentor .
+docker build -t ai-code-commentor ./backend
 ```
 
 Run Container
 ```bash
 
-docker run -d -p 5000:5000 --env-file .env ai-code-commentor:latest
+docker run -d -p 5000:5000 --env-file backend/.env ai-code-commentor:latest
 ```
 
 **⚙️ CI/CD with Jenkins**
@@ -83,17 +88,22 @@ docker run -d -p 5000:5000 --env-file .env ai-code-commentor:latest
 - Jenkinsfile included in repo with DockerHub credentials integration
 
 **📂 Project Structure**
-```csharp
-├── app.py                 # Flask backend
-├── requirements.txt       # Dependencies
-├── Dockerfile             # Docker build steps
-├── Jenkinsfile            # CI/CD pipeline config
-├── .env                   # API key (excluded from Git)
-├── templates/
-│   └── index.html         # Frontend UI
-└── static/
-    └── bg.mp4 
-    └──image.png            # Live video background
+```
+├── backend/                # Flask backend
+│   ├── app.py              # Main Flask app
+│   ├── requirements.txt    # Dependencies
+│   ├── Dockerfile          # Docker build steps
+│   ├── .env                # API key (excluded from Git)
+│   ├── templates/          # (linked from frontend)
+│   └── static/             # (linked from frontend)
+├── frontend/               # Frontend assets
+│   ├── templates/
+│   │   └── index.html      # Frontend UI
+│   └── static/
+│       ├── bg.mp4          # Live video background
+│       └── image.png       # Preview image
+├── Jenkinsfile             # CI/CD pipeline config
+└── .gitignore              # Git ignore rules
 ```
 
 ---
